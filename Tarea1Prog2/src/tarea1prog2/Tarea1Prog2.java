@@ -45,6 +45,7 @@ class Tarjeta extends Pago{
 class Pago{
     private float monto;
     private Date fecha;
+    private OrdenCompra OrdenCompra;
     public Pago(float m,Date f){
         monto = m;
         fecha = f;
@@ -77,6 +78,8 @@ class DocTributario{
     private String numero;
     private String rut;
     private Date fecha;
+    private OrdenCompra OrdenCompra;
+    private Direccion direccion;
     public DocTributario(String n,String r, Date f){
         numero = n;
         rut= r;
@@ -97,6 +100,8 @@ class DocTributario{
 }
 class Direccion{
     private String direccion;
+    private ArrayList<DocTributario> DocTributarioAR;
+    private ArrayList<Cliente> ClienteAR;
     public Direccion(String d){
         direccion = d;
     }
@@ -110,9 +115,14 @@ class Direccion{
 class Cliente{
     private String nombre;
     private String rut;
+    private Direccion direccion;
+    private ArrayList<OrdenCompra> OrdenCompraAR;
     public Cliente(String n,String r){
         nombre = n;
         rut = r;
+    }
+    public void setDireccion(Direccion d){
+        direccion = d;
     }
     public String getnombre(){
         return nombre;
@@ -121,7 +131,7 @@ class Cliente{
         return rut;
     }
     public String toString(){
-        return "Los datos del cliente son: \nNombre: " + nombre + " \nRut: " + rut;
+        return "Los datos del cliente son: \nNombre: " + nombre + " \nRut: " + rut + " \nDireccion: " + direccion.toString();
     }
 }
 class Articulo{
@@ -129,6 +139,7 @@ class Articulo{
     private String nombre;
     private String descripcion;
     private float precio;
+    private ArrayList<DetalleOrden> DetalleOrdenAR;
     public Articulo(float pe,String n, String d,float pr){
         peso = pe;
         nombre = n;
@@ -147,34 +158,45 @@ class Articulo{
 }
 class DetalleOrden{
     private int cantidad;
+    private Articulo Articulo;
+    private OrdenCompra OrdenCompra;
     public DetalleOrden(int c){
         cantidad = c;
+    }
+    public void setArticulo(Articulo a){
+        Articulo = a;
+    }
+    public Articulo getArticulo(){
+        return Articulo;
     }
     public int getCantidad(){
         return cantidad;
     }
     public float calcPrecio(){
-        
+        return calcPrecioSinIVA() + calcIVA();
     }
     public float calcPrecioSinIVA(){
-        
+        return (float)cantidad * Articulo.getprecio();
     }
     public float calcIVA(){
-        
+        return (calcPrecioSinIVA() * 19) / 100;
     }
     public float calcPeso(){
-        
+        return (float)cantidad * Articulo.getpeso();
     }
     public String toString(){
-        return "Los datos del detalle de orden son\nCantidad : " + cantidad;
+        return "Los datos del detalle de orden son \nArticulo " + Articulo + "\nCantidad : " + cantidad;
     }
     
     
 }
 class OrdenCompra{
+    private DocTributario DocTributario;
     private Date fecha;
     private String estado;
     private ArrayList<DetalleOrden> DetalleOrdenAR;
+    private Cliente Cliente;
+    private ArrayList<Pago> PagoAR;
     public OrdenCompra(Date f, String e){
         fecha = f;
         estado = e;
@@ -189,17 +211,34 @@ class OrdenCompra{
     public int sizeDetalleOrdenAR(){
         return DetalleOrdenAR.size();
     }
+    public int sizePagoAR(){
+        return PagoAR.size();
+    }
+    public void setDocTributario(DocTributario dt){
+        DocTributario = dt;
+    }
+    public void setCliente(Cliente c){
+        Cliente = c;
+    }
     public float calcPrecio(){
-        
+        return calcPrecioSinIVA() + calcIVA();
     }
     public float calcPrecioSinIVA(){
-        
+        float aux = 0;
+        for(int i=0;i<DetalleOrdenAR.size();i=i+1){
+            aux = DetalleOrdenAR.get(i).calcPrecioSinIVA() + aux;
+        }
+        return aux;
     }
     public float calcIVA(){
-        
+        return (calcPrecioSinIVA() * 19) / 100;
     }
     public float calcPeso(){
-        
+        float aux = 0;
+        for(int i=0;i<DetalleOrdenAR.size();i=i+1){
+            aux = DetalleOrdenAR.get(i).calcPeso() + aux;
+        }
+        return aux;
     }
     public String toString(){
         return "Los datos de la Orden de Compra son\nEstado : " + estado + "\nFecha : " + fecha;
