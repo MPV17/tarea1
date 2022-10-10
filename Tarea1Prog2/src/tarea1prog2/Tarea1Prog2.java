@@ -1,6 +1,4 @@
 
-package tarea1prog2;
-
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -262,7 +260,7 @@ public class Tarea1Prog2 {
         
         Date F1 = new Date();
         
-        OrdenCompra OC1 = new OrdenCompra(F1,"Entregado");
+        OrdenCompra OC1 = new OrdenCompra(F1,"Pagado");
         DetalleOrden DO10 = new DetalleOrden(5);
         DO10.setArticulo(A5);
         DetalleOrden DO11 = new DetalleOrden(3);
@@ -276,7 +274,7 @@ public class Tarea1Prog2 {
         OC1.setDocTributario(DT1);
         Efectivo P1 = new Efectivo(300000,F1);
         
-        OrdenCompra OC2 = new OrdenCompra(F1,"Entregado");
+        OrdenCompra OC2 = new OrdenCompra(F1,"Pagado");
         DetalleOrden DO20 = new DetalleOrden(3);
         DO20.setArticulo(A1);
         DetalleOrden DO21 = new DetalleOrden(2);
@@ -288,7 +286,7 @@ public class Tarea1Prog2 {
         Transferencia P2 = new Transferencia(12000,F1,"Estado","2109214");
         Transferencia P3 = new Transferencia(12000,F1,"Estado","2109214");
         
-        OrdenCompra OC3 = new OrdenCompra(F1,"Entregado");
+        OrdenCompra OC3 = new OrdenCompra(F1,"Pagado");
         DetalleOrden DO30 = new DetalleOrden(7);
         DO30.setArticulo(A4);
         OC3.add(DO30);
